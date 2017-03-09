@@ -1,0 +1,70 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+      classpath("org.json:json:20160810")
+      classpath("com.googlecode.json-simple:json-simple:1.1.1")
+      classpath("com.google.code.gson:gson:1.7.2")
+
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+
+sourceCompatibility = 1.8
+
+group ='com.ibm.lift'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Validation Jar',
+                   'Implementation-Version': '1.0',
+                   'Main-Class': 'com.ibm.lift.RefreshJars'
+    }
+    doFirst {
+		from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+	}
+}
+
+repositories{
+    mavenCentral()
+}
+
+
+dependencies {
+    compile group: 'org.json', name: 'json', version: '20160810'
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
+  
+
+}
+
+
+sourceSets{
+    main{
+        java{
+            include '**/*.java'
+        }
+        resources{
+            exclude '**/*.java'
+        }
+    }
+
+}
+
+task libDir(dependsOn: assemble, type: Copy) {
+  into('lib')
+  from configurations.runtime
+  from configurations.runtime.allArtifacts.file
+}
+
+task buildAndCopyDependencies(type: Copy) {
+  dependsOn build
+  from configurations.runtime
+  from jar
+  into "../toolkit/libs"
+}
