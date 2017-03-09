@@ -12,6 +12,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
+
 public class JSONUtils {
 
   public static boolean areEqual(Object jarsmetafile, Object metafile) throws JSONException
@@ -45,6 +49,10 @@ public class JSONUtils {
 
   }
 
-
+ public static String jsonFormatter(org.json.simple.JSONObject object) throws Exception
+ {
+   ObjectMapper mapper = new ObjectMapper();
+   return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+ }
 
 }

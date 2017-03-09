@@ -12,6 +12,9 @@ import org.json.simple.parser.ParseException;
 
 import com.ibm.lift.util.JSONUtils;
 import com.ibm.lift.util.GenerateChecksum;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
+
 
 public class RefreshJars {
 
@@ -147,7 +150,7 @@ public static void main(String[] args) {
         JSONObject rootElement = new JSONObject();
         rootElement.put("files",filesArray);
         file = new FileWriter("../metafile.json");
-        file.write(rootElement.toString());
+        file.write(JSONUtils.jsonFormatter(rootElement));
       }
       catch(IOException e)
       {
