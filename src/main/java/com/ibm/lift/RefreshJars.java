@@ -89,6 +89,18 @@ public static void main(String[] args) {
           else
           {
             System.out.println("Jar details not found locally, pulling the jar " + remoteName );
+            try {
+              boolean compareChecksumFlag = compareChecksum(remoteName,remoteFile);
+              if(compareChecksumFlag)
+              {
+                System.out.println("Checksum matched, Update metafile");
+                updateMetaFile(localFile,remoteFile);
+
+              }
+            }
+            catch(Exception e) {
+              e.printStackTrace();
+            }
           }
 
           index ++;
