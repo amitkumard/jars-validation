@@ -9,21 +9,30 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import com.ibm.lift.util.JSONUtils;
 import com.ibm.lift.util.GenerateChecksum;
+import com.ibm.lift.util.HttpClientHelper;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 
 
 public class RefreshJars {
 
-  static String FILES = "files";
-  static String NAME = "name";
-  static String VERSION = "version";
-  static String CHECKSUM = "checksum";
-  static String SIZE = "size";
-  static String URL = "url";
+  static String FILES = "FILES";
+  static String NAME = "NAME";
+  static String VERSION = "VERSION";
+  static String CHECKSUM = "CHECKSUM";
+  static String SIZE = "SIZE";
+  static String URL = "URL";
+  static String DIRECTORY = "../libs";
+
 
 public static void main(String[] args) {
 
@@ -31,6 +40,10 @@ public static void main(String[] args) {
       JSONUtils jsonUtil = new JSONUtils();
 
       System.out.println ("Refreshing local jars with latest updates...");
+
+      System.out.println("Writing to remotemetafile!");
+      HttpClientHelper.requestMetafile();
+      System.out.println("Finished Writing!");
 
       try {
             Object obj1 = parser.parse(new FileReader("../metafile.json"));
@@ -58,6 +71,7 @@ public static void main(String[] args) {
         }
     }
 
+
     private static void compareMetafiles(JSONObject local, JSONObject remote)
     {
         JSONArray files = (JSONArray)remote.get(RefreshJars.FILES);
@@ -75,6 +89,7 @@ public static void main(String[] args) {
             else
             {
               System.out.println ("Version mismatch for " + remoteName + " downloading latest version...");
+              HttpClientHelper.downloadJAR((String)remoteFile.get(RefreshJars.URL), RefreshJars.DIRECTORY, remoteName);
               try {
                 boolean compareChecksumFlag = compareChecksum(remoteName,remoteFile);
                 if(compareChecksumFlag)
@@ -92,6 +107,7 @@ public static void main(String[] args) {
           else
           {
             System.out.println("Jar details not found locally, pulling the jar " + remoteName );
+            HttpClientHelper.downloadJAR((String)remoteFile.get(RefreshJars.URL), RefreshJars.DIRECTORY, remoteName);
             try {
               boolean compareChecksumFlag = compareChecksum(remoteName,remoteFile);
               if(compareChecksumFlag)
@@ -148,7 +164,7 @@ public static void main(String[] args) {
         filesArray.remove(localFile);
         filesArray.add(remoteFile);
         JSONObject rootElement = new JSONObject();
-        rootElement.put("files",filesArray);
+        rootElement.put("FILES",filesArray);
         file = new FileWriter("../metafile.json");
         file.write(JSONUtils.jsonFormatter(rootElement));
       }
