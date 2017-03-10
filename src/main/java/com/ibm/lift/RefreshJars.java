@@ -15,10 +15,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+
+
+import java.nio.charset.Charset;
+import java.nio.file.*;
+
+
 import com.ibm.lift.util.JSONUtils;
 import com.ibm.lift.util.GenerateChecksum;
 import com.ibm.lift.util.HttpClientHelper;
 import com.ibm.lift.util.OsUtils;
+import com.ibm.lift.util.EncryptionUtil;
+import com.ibm.lift.util.FileUtil;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -33,8 +41,6 @@ public class RefreshJars {
   static String SIZE = "SIZE";
   static String URL = "URL";
   static String DIRECTORY = "../libs";
-  static String localMeta;
-  static String remoteMeta;
   static boolean localMetaFound = Boolean.FALSE;
 
 
@@ -42,7 +48,7 @@ public static void main(String[] args) {
 
 
 
-      getMetaFileNames();
+      FileUtil.getMetaFileNames();
 
       JSONParser parser = new JSONParser();
       JSONUtils jsonUtil = new JSONUtils();
@@ -50,17 +56,20 @@ public static void main(String[] args) {
       System.out.println ("Refreshing local jars with latest updates...");
 
       System.out.println("Writing to remotemetafile!");
-      HttpClientHelper.requestMetafile(remoteMeta);
+      HttpClientHelper.requestMetafile(FileUtil.remoteMeta);
       System.out.println("Finished Writing!");
 
       try {
+
             Object obj1 = null;
-            if (new File(localMeta).isFile())
+            if (new File(FileUtil.localMeta).isFile())
             {
-              obj1 = parser.parse(new FileReader(localMeta));
+              String content = FileUtil.readFile(FileUtil.localMeta, Charset.defaultCharset());
+              String decryptedContents = EncryptionUtil.decrpytString(content);
+              obj1 = parser.parse(decryptedContents);
               localMetaFound = Boolean.TRUE;
             }
-            Object obj2 = parser.parse(new FileReader(remoteMeta));
+            Object obj2 = parser.parse(new FileReader(FileUtil.remoteMeta));
             //check if both metafiles are same instead looking at individual entry
 
             if(localMetaFound) {
@@ -87,6 +96,9 @@ public static void main(String[] args) {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -184,9 +196,11 @@ public static void main(String[] args) {
         JSONParser parser = new JSONParser();
         try {
 
-        if (new File(localMeta).isFile())
+        if (new File(FileUtil.localMeta).isFile())
         {
-          local = (JSONObject) parser.parse(new FileReader(localMeta));
+          String content = FileUtil.readFile(FileUtil.localMeta, Charset.defaultCharset());
+          String decryptedContents = EncryptionUtil.decrpytString(content);
+          local = (JSONObject) parser.parse(decryptedContents);
           filesArray = (JSONArray)local.get(RefreshJars.FILES);
         }
         else
@@ -199,8 +213,8 @@ public static void main(String[] args) {
         filesArray.add(remoteFile);
         JSONObject rootElement = new JSONObject();
         rootElement.put("FILES",filesArray);
-        file = new FileWriter(localMeta);
-        file.write(JSONUtils.jsonFormatter(rootElement));
+        file = new FileWriter(FileUtil.localMeta);
+        file.write(EncryptionUtil.encrpytString(rootElement.toString()));
       }
       catch(IOException e)
       {
@@ -216,23 +230,5 @@ public static void main(String[] args) {
       }
     }
 
-    private static void getMetaFileNames()
-    {
-      OsUtils.OSType detectedOS = OsUtils.getOperatingSystemType();
-      switch (detectedOS.name()) {
-          case "Windows":
-            localMeta = "../metafile.json";
-            remoteMeta = "../remotemetafile.json";
-            break;
-          case "MacOS":
-            localMeta = "../.metafile.json";
-            remoteMeta = "../.remotemetafile.json";
-            break;
-          case "Linux":
-            localMeta = "../.metafile.json";
-            remoteMeta = "../.remotemetafile.json";
-            break;
-          case "Other": break;
-      }
-    }
+
 }
