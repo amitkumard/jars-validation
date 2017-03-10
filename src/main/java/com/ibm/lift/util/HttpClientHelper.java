@@ -12,10 +12,13 @@ import java.io.InputStream;
 import java.nio.file.*;
 
 import com.ibm.lift.util.EncryptionUtil;
+import com.ibm.lift.util.MoveFileUtil;
 
 public class HttpClientHelper {
 
   static String url = "http://cfappmaster.mybluemix.net/";
+  static String DIRECTORY = "../libs";
+  static String TEMP_DIRECTORY = "../temp";
 
   public static void requestMetafile(String metaFileName)
   {
@@ -97,10 +100,10 @@ public class HttpClientHelper {
                       fileURL.length());
           }
 
-          System.out.println("Content-Type = " + contentType);
-          System.out.println("Content-Disposition = " + disposition);
-          System.out.println("Content-Length = " + contentLength);
-          System.out.println("fileName = " + fileName);
+          //System.out.println("Content-Type = " + contentType);
+          //System.out.println("Content-Disposition = " + disposition);
+          //System.out.println("Content-Length = " + contentLength);
+          //System.out.println("fileName = " + fileName);
 
           // opens input stream from the HTTP connection
           InputStream inputStream = httpConn.getInputStream();
@@ -119,6 +122,8 @@ public class HttpClientHelper {
           inputStream.close();
 
           System.out.println(fileName + " File downloaded");
+          System.out.println("Moving the file to libs");
+          MoveFileUtil.moveJAR(fileName, HttpClientHelper.DIRECTORY, HttpClientHelper.TEMP_DIRECTORY);
       } else {
           System.out.println("No file to download. Server replied HTTP code: " + responseCode);
       }
