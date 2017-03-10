@@ -52,6 +52,9 @@ public static void main(String[] args) {
 
       JSONParser parser = new JSONParser();
       JSONUtils jsonUtil = new JSONUtils();
+      String content="";
+      String decryptedContents="";
+
 
       System.out.println ("Refreshing local jars with latest updates...");
 
@@ -64,12 +67,14 @@ public static void main(String[] args) {
             Object obj1 = null;
             if (new File(FileUtil.localMeta).isFile())
             {
-              String content = FileUtil.readFile(FileUtil.localMeta, Charset.defaultCharset());
-              String decryptedContents = EncryptionUtil.decrpytString(content);
+              content = FileUtil.readFile(FileUtil.localMeta, Charset.defaultCharset());
+              decryptedContents = EncryptionUtil.decrpytString(content);
               obj1 = parser.parse(decryptedContents);
               localMetaFound = Boolean.TRUE;
             }
-            Object obj2 = parser.parse(new FileReader(FileUtil.remoteMeta));
+            content = FileUtil.readFile(FileUtil.remoteMeta, Charset.defaultCharset());
+            decryptedContents = EncryptionUtil.decrpytString(content);
+            Object obj2 = parser.parse(decryptedContents);
             //check if both metafiles are same instead looking at individual entry
 
             if(localMetaFound) {

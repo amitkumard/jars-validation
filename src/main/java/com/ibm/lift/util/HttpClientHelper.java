@@ -11,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.*;
 
+import com.ibm.lift.util.EncryptionUtil;
+
 public class HttpClientHelper {
 
   static String url = "http://cfappmaster.mybluemix.net/";
@@ -45,9 +47,7 @@ public class HttpClientHelper {
         }
         in.close();
 
-        data = response.toString();
-        //print result
-        //System.out.println("Data Received: " + data);
+        data = EncryptionUtil.encrpytString(response.toString());
 
         try
         {
