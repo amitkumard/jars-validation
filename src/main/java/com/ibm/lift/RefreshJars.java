@@ -18,6 +18,7 @@ import java.io.InputStream;
 import com.ibm.lift.util.JSONUtils;
 import com.ibm.lift.util.GenerateChecksum;
 import com.ibm.lift.util.HttpClientHelper;
+import com.ibm.lift.util.OsUtils;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -32,9 +33,16 @@ public class RefreshJars {
   static String SIZE = "SIZE";
   static String URL = "URL";
   static String DIRECTORY = "../libs";
+  static String localMeta;
+  static String remoteMeta;
+  static boolean localMetaFound = Boolean.FALSE;
 
 
 public static void main(String[] args) {
+
+
+
+      getMetaFileNames();
 
       JSONParser parser = new JSONParser();
       JSONUtils jsonUtil = new JSONUtils();
@@ -42,18 +50,30 @@ public static void main(String[] args) {
       System.out.println ("Refreshing local jars with latest updates...");
 
       System.out.println("Writing to remotemetafile!");
-      HttpClientHelper.requestMetafile();
+      HttpClientHelper.requestMetafile(remoteMeta);
       System.out.println("Finished Writing!");
 
       try {
-            Object obj1 = parser.parse(new FileReader("../metafile.json"));
-            Object obj2 = parser.parse(new FileReader("../remotemetafile.json"));
+            Object obj1 = null;
+            if (new File(localMeta).isFile())
+            {
+              obj1 = parser.parse(new FileReader(localMeta));
+              localMetaFound = Boolean.TRUE;
+            }
+            Object obj2 = parser.parse(new FileReader(remoteMeta));
             //check if both metafiles are same instead looking at individual entry
 
-            if(jsonUtil.areEqual(obj1,obj2))
-            {
-              System.out.println("Nothing to refresh...");
-              System.out.println("Data migration can begin");
+            if(localMetaFound) {
+              if(jsonUtil.areEqual(obj1,obj2))
+              {
+                System.out.println("Nothing to refresh...");
+                System.out.println("Data migration can begin");
+              }
+              else
+              {
+                System.out.println("Difference in metafile, pulling new version of jars...");
+                compareMetafiles((JSONObject)obj1, (JSONObject)obj2);
+              }
             }
             else
             {
@@ -129,6 +149,8 @@ public static void main(String[] args) {
 
     private static JSONObject searchMetaFile(JSONObject local,String remoteName)
     {
+      if (local == null)
+        return local;
       JSONArray files = (JSONArray)local.get(RefreshJars.FILES);
       for (Object file : files )
       {
@@ -157,15 +179,27 @@ public static void main(String[] args) {
     private static void updateMetaFile(JSONObject localFile,JSONObject remoteFile) throws IOException
     {
         FileWriter file = null;
-        try {
+        JSONObject local = null;
+        JSONArray filesArray = null;
         JSONParser parser = new JSONParser();
-        JSONObject local = (JSONObject) parser.parse(new FileReader("../metafile.json"));
-        JSONArray filesArray = (JSONArray)local.get(RefreshJars.FILES);
+        try {
+
+        if (new File(localMeta).isFile())
+        {
+          local = (JSONObject) parser.parse(new FileReader(localMeta));
+          filesArray = (JSONArray)local.get(RefreshJars.FILES);
+        }
+        else
+        {
+          filesArray = new JSONArray();
+        }
+
+
         filesArray.remove(localFile);
         filesArray.add(remoteFile);
         JSONObject rootElement = new JSONObject();
         rootElement.put("FILES",filesArray);
-        file = new FileWriter("../metafile.json");
+        file = new FileWriter(localMeta);
         file.write(JSONUtils.jsonFormatter(rootElement));
       }
       catch(IOException e)
@@ -179,6 +213,26 @@ public static void main(String[] args) {
       finally {
         file.flush();
         file.close();
+      }
+    }
+
+    private static void getMetaFileNames()
+    {
+      OsUtils.OSType detectedOS = OsUtils.getOperatingSystemType();
+      switch (detectedOS.name()) {
+          case "Windows":
+            localMeta = "../metafile.json";
+            remoteMeta = "../remotemetafile.json";
+            break;
+          case "MacOS":
+            localMeta = "../.metafile.json";
+            remoteMeta = "../.remotemetafile.json";
+            break;
+          case "Linux":
+            localMeta = "../.metafile.json";
+            remoteMeta = "../.remotemetafile.json";
+            break;
+          case "Other": break;
       }
     }
 }

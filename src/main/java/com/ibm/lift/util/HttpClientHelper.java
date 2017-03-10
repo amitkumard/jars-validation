@@ -9,12 +9,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.file.*;
 
 public class HttpClientHelper {
 
   static String url = "http://cfappmaster.mybluemix.net/";
 
-  public static void requestMetafile()
+  public static void requestMetafile(String metaFileName)
   {
     String data = null;
     String USER_AGENT = "Mozilla/5.0";
@@ -50,8 +51,7 @@ public class HttpClientHelper {
 
         try
         {
-            FileWriter file = new FileWriter("../remotemetafile.json");
-
+            FileWriter file = new FileWriter(metaFileName);
             file.write(data);
             file.flush();
         }
