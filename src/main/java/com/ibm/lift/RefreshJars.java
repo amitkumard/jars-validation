@@ -14,8 +14,7 @@ import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-
-
+import org.apache.log4j.Logger;
 
 import java.nio.charset.Charset;
 import java.nio.file.*;
@@ -42,6 +41,7 @@ public class RefreshJars {
   static String URL = "URL";
   static String DIRECTORY = "../libs";
   static boolean localMetaFound = Boolean.FALSE;
+  private static final Logger logger = Logger.getLogger(RefreshJars.class);
 
 
 public static void main(String[] args) {
@@ -58,9 +58,9 @@ public static void main(String[] args) {
 
       System.out.println ("Refreshing local jars with latest updates...");
 
-      System.out.println("Writing to remotemetafile!");
+      logger.debug("Writing to remotemetafile!");
       HttpClientHelper.requestMetafile(FileUtil.remoteMeta);
-      System.out.println("Finished Writing!");
+      logger.debug("Finished Writing!");
 
       try {
 
@@ -69,11 +69,15 @@ public static void main(String[] args) {
             {
               content = FileUtil.readFile(FileUtil.localMeta, Charset.defaultCharset());
               decryptedContents = EncryptionUtil.decrpytString(content);
+              logger.debug("Local metadata file");
+              logger.debug(decryptedContents);
               obj1 = parser.parse(decryptedContents);
               localMetaFound = Boolean.TRUE;
             }
             content = FileUtil.readFile(FileUtil.remoteMeta, Charset.defaultCharset());
             decryptedContents = EncryptionUtil.decrpytString(content);
+            logger.debug("Remote metadata file");
+            logger.debug(decryptedContents);
             Object obj2 = parser.parse(decryptedContents);
             //check if both metafiles are same instead looking at individual entry
 
