@@ -18,7 +18,7 @@ import com.ibm.lift.util.MoveFileUtil;
 public class HttpClientHelper {
 
   private static final Logger logger = Logger.getLogger(HttpClientHelper.class);
-  static String url = "http://cfappmaster.mybluemix.net/";
+  static String url = "https://liftcfappmaster.mybluemix.net";
   static String DIRECTORY = "../libs";
   static String TEMP_DIRECTORY = "../temp";
 
