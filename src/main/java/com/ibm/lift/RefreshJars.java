@@ -58,7 +58,9 @@ public static void main(String[] args) {
 
 
       System.out.println ("Refreshing local jars with latest updates...");
-
+      logger.debug ("------------------------------------------------");
+      logger.debug ("  Refreshing local jars with latest updates  ");
+      logger.debug ("------------------------------------------------");
       logger.debug("Writing to remotemetafile!");
       HttpClientHelper.requestMetafile(FileUtil.remoteMeta);
       logger.debug("Finished Writing!");

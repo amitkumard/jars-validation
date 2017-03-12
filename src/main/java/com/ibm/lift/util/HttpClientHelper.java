@@ -10,12 +10,14 @@ import java.io.InputStreamReader;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.*;
+import org.apache.log4j.Logger;
 
 import com.ibm.lift.util.EncryptionUtil;
 import com.ibm.lift.util.MoveFileUtil;
 
 public class HttpClientHelper {
 
+  private static final Logger logger = Logger.getLogger(HttpClientHelper.class);
   static String url = "http://cfappmaster.mybluemix.net/";
   static String DIRECTORY = "../libs";
   static String TEMP_DIRECTORY = "../temp";
@@ -100,10 +102,10 @@ public class HttpClientHelper {
                       fileURL.length());
           }
 
-          //System.out.println("Content-Type = " + contentType);
-          //System.out.println("Content-Disposition = " + disposition);
-          //System.out.println("Content-Length = " + contentLength);
-          //System.out.println("fileName = " + fileName);
+          logger.debug("Content-Type = " + contentType);
+          logger.debug("Content-Disposition = " + disposition);
+          logger.debug("Content-Length = " + contentLength);
+          logger.debug("fileName = " + fileName);
 
           // opens input stream from the HTTP connection
           InputStream inputStream = httpConn.getInputStream();
