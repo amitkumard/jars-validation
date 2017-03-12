@@ -40,6 +40,7 @@ public class RefreshJars {
   static String SIZE = "SIZE";
   static String URL = "URL";
   static String DIRECTORY = "../libs";
+  static String TEMP_DIRECTORY = "../temp";
   static boolean localMetaFound = Boolean.FALSE;
   private static final Logger logger = Logger.getLogger(RefreshJars.class);
 
@@ -89,13 +90,13 @@ public static void main(String[] args) {
               }
               else
               {
-                System.out.println("Difference in metafile, pulling new version of jars...");
+                //System.out.println("Difference in metafile, pulling new version of jars...");
                 compareMetafiles((JSONObject)obj1, (JSONObject)obj2);
               }
             }
             else
             {
-              System.out.println("Difference in metafile, pulling new version of jars...");
+              //System.out.println("Difference in metafile, pulling new version of jars...");
               compareMetafiles((JSONObject)obj1, (JSONObject)obj2);
             }
 
@@ -130,7 +131,7 @@ public static void main(String[] args) {
             else
             {
               System.out.println ("Version mismatch for " + remoteName + " downloading latest version...");
-              HttpClientHelper.downloadJAR((String)remoteFile.get(RefreshJars.URL), RefreshJars.DIRECTORY, remoteName);
+              HttpClientHelper.downloadJAR((String)remoteFile.get(RefreshJars.URL), RefreshJars.TEMP_DIRECTORY, remoteName);
               try {
                 boolean compareChecksumFlag = compareChecksum(remoteName,remoteFile);
                 if(compareChecksumFlag)
@@ -148,7 +149,7 @@ public static void main(String[] args) {
           else
           {
             System.out.println("Jar details not found locally, pulling the jar " + remoteName );
-            HttpClientHelper.downloadJAR((String)remoteFile.get(RefreshJars.URL), RefreshJars.DIRECTORY, remoteName);
+            HttpClientHelper.downloadJAR((String)remoteFile.get(RefreshJars.URL), RefreshJars.TEMP_DIRECTORY, remoteName);
             try {
               boolean compareChecksumFlag = compareChecksum(remoteName,remoteFile);
               if(compareChecksumFlag)
