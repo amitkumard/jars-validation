@@ -50,12 +50,21 @@ dependencies {
     compile 'log4j:log4j:1.2.17'
     compile 'org.slf4j:slf4j-api:1.7.5'
     compile 'org.slf4j:slf4j-log4j12:1.7.5'
+    testCompile 'junit:junit:4.12'
 
 }
 
 
 sourceSets{
-    main{
+    main {
+        java {
+            include '**/*.java'
+        }
+        resources {
+            exclude '**/*.java'
+        }
+    }
+    test{
         java{
             include '**/*.java'
         }
@@ -63,7 +72,13 @@ sourceSets{
             exclude '**/*.java'
         }
     }
+}
 
+test {
+    reports {
+        junitXml.enabled = false
+        html.enabled = true
+    }
 }
 
 task libDir(dependsOn: assemble, type: Copy) {
