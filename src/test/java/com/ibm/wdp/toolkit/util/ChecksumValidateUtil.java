@@ -6,30 +6,22 @@
 
 package com.ibm.wdp.toolkit.util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.security.MessageDigest;
 
 public class ChecksumValidateUtil {
-  static String directory = "../libs";
+
   public static boolean generateChecksum() {
     boolean success = true; //set it to false when checksum generation is not a success
+    String file = (ChecksumValidateUtil.class.getClassLoader().getResource("dummy.jar")).getFile();
 
-    File dir = new File(directory);
-    File[] directoryListing = dir.listFiles();
     try {
-      if (directoryListing != null) {
-        for (File child : directoryListing) {
-          String checksum = getMd5Checksum(child.getName());
-          System.out.println(checksum);
-          if (checksum == null || checksum.length() == 0) {
-            success = false;
-            break;
-          }
-        }
-      } else {
+      String checksum = getMd5Checksum(file);
+      System.out.println(checksum);
+      if (checksum == null || checksum.length() == 0) {
         success = false;
       }
+
     } catch (Exception e) {
       success = false;
       e.printStackTrace();
