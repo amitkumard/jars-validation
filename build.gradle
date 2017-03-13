@@ -20,13 +20,13 @@ apply plugin: 'checkstyle'
 
 sourceCompatibility = 1.8
 
-group ='com.ibm.lift'
+group ='com.ibm.wdp.toolkit'
 
 jar {
     manifest {
         attributes 'Implementation-Title': 'Validation Jar',
                    'Implementation-Version': '1.0',
-                   'Main-Class': 'com.ibm.lift.RefreshJars'
+                   'Main-Class': 'com.ibm.wdp.toolkit.RefreshJars'
     }
     doFirst {
 		from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
