@@ -169,7 +169,7 @@ public class RefreshJars {
         local = (JSONObject) parser.parse(decryptedContents);
         filesArray = (JSONArray) local.get(RefreshJars.FILES);
       } else {
-        filesArray = new JSONArray ();
+        filesArray = new JSONArray();
       }
       filesArray.remove(localFile);
       filesArray.add(remoteFile);
