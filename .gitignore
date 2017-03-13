@@ -14,6 +14,7 @@ hs_err_pid*
 # Exclude gradle and eclipse directories
 /target/
 /build/
+/classes/
 .gradle
 .idea
 .classpath
