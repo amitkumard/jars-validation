@@ -14,7 +14,11 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
-
+/**
+ * 
+ * class for performing encryption and decryption. 
+ *
+ */
 
 public class EncryptionUtil {
 
@@ -22,14 +26,45 @@ public class EncryptionUtil {
 
   private static final int IV_LENGTH = 16;
 
+  /**
+   *
+   * Converts a string to a byte array which is used to generate key that is 
+   * to be used in the Public Key Encryption and Decryption
+   * 
+   * @return
+   * Returns byte array 
+   * @throws Exception
+   * If an exception occurs while converting the string to byte array		
+   */
 
   private static byte[] getSaltBytes() throws Exception {
     return SALT.getBytes("UTF-8");
   }
 
+  /**
+   * 
+   * Converts a string to a character array
+   * 
+   * @return
+   * Returns an array of characters
+   */
+  
   private static char[] getMasterPassword() {
     return "SuperSecretPassword".toCharArray();
   }
+  
+  /**
+   * 
+   * Performs encryption on a string
+   * 
+   * @param input
+   * The string on which the encryption is to be performed
+   * @return
+   * Returns the string in encrypted form as a string
+   * @throws Exception
+   * If an exception occurs while encryption
+   */
+  
   public static String encrpytString(String input) throws Exception {
     SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
     PBEKeySpec spec = new PBEKeySpec(getMasterPassword(), getSaltBytes(), 65536, 128);
@@ -45,6 +80,18 @@ public class EncryptionUtil {
     return DatatypeConverter.printBase64Binary(finalByteArray);
   }
 
+  /**
+   * 
+   * Performs decryption of the string
+   * 
+   * @param input
+   * The string on which decryption is to be performed
+   * @return
+   * Returns the original contents of the string as a string
+   * @throws Exception
+   * If an exception occurs while decryption
+   */
+  
   public static String decrpytString(String input) throws Exception {
     if (input.length() <= IV_LENGTH) {
       throw new Exception("The input string is not long enough to contain the initialisation bytes and data.");

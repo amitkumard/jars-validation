@@ -15,6 +15,11 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import org.apache.log4j.Logger;
 
+/**
+ * 
+ * class for requesting remoteFileData from the server and downloading JARs
+ *
+ */
 
 public class HttpClientHelper {
 
@@ -22,6 +27,14 @@ public class HttpClientHelper {
   private static final String URL = "https://liftcfappmaster.mybluemix.net";
   private static final String DIRECTORY = "../libs";
 
+  /**
+   * 
+   * Makes a secure call to the downloader-server to obtain the remote metadata object
+   * 
+   * @param metaFileName
+   * File to which the remote metadata object has to be written 
+   */
+  
   public static void requestMetafile(String metaFileName) {
     String data = null;
     String userAgent = "Mozilla/5.0";
@@ -59,6 +72,18 @@ public class HttpClientHelper {
     }
   }
 
+  /**
+   * 
+   * Makes a secure request to the server where the requested JAR resides and downloads the JAR
+   * 
+   * @param fileURL
+   * The URL where the JAR to be downloaded resides
+   * @param saveDir
+   * The directory where the downloaded JAR is to be copied
+   * @param fileName
+   * The name of the JAR that is to be downloaded
+   */
+  
   public static void downloadJAR(String fileURL, String saveDir, String fileName) {
     int bufferSize = 4096;
     try {

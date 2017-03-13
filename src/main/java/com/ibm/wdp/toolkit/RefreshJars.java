@@ -97,11 +97,11 @@ public class RefreshJars {
   /**
    *
    * @param local
-   *           Local metadata object that is within toolkit
+   * Local metadata object that is within toolkit
    * @param remote
-   *           Remote metadata object response received from downloder-server
+   * Remote metadata object response received from downloder-server
    * @throws IOException
-   *           If metadata file is not found
+   * If metadata file is not found
    */
 
   private static void compareMetafiles(JSONObject local, JSONObject remote) throws IOException {
