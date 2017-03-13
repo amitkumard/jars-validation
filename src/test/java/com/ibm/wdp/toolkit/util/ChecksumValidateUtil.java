@@ -13,7 +13,7 @@ public class ChecksumValidateUtil {
 
   public static boolean generateChecksum() {
     boolean success = true; //set it to false when checksum generation is not a success
-    String file = (ChecksumValidateUtil.class.getClassLoader().getResource("dummy.jar")).getFile();
+    String file = (ChecksumValidateUtil.class.getClassLoader().getResource("dummy.txt")).getFile();
 
     try {
       String checksum = getMd5Checksum(file);
