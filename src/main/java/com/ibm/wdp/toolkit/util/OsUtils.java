@@ -11,7 +11,7 @@ public class OsUtils {
    * types of Operating Systems
    */
   public enum OSType {
-    Windows, Macos, Linux, Other
+    Windows, MacOS, Linux, Other
   };
 
   // cached result of os detection
@@ -27,7 +27,7 @@ public class OsUtils {
     if (detectedos == null) {
       String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
       if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
-        detectedos = OSType.Macos;
+        detectedos = OSType.MacOS;
       } else if (os.indexOf("win") >= 0) {
         detectedos = OSType.Windows;
       } else if (os.indexOf("nux") >= 0) {
