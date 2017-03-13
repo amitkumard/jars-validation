@@ -2,14 +2,7 @@ buildscript {
   repositories {
     mavenCentral()
   }
-  dependencies {
-      classpath("org.json:json:20160810")
-      classpath("com.googlecode.json-simple:json-simple:1.1.1")
-      classpath("com.google.code.gson:gson:1.7.2")
-      classpath("org.codehaus.jackson:jackson-core-asl:1.9.13")
-      classpath("org.codehaus.jackson:jackson-mapper-asl:1.9.13")
 
-  }
 }
 
 apply plugin: 'java'
