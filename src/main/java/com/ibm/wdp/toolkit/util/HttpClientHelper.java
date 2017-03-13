@@ -51,6 +51,7 @@ public class HttpClientHelper {
         FileWriter file = new FileWriter(metaFileName);
         file.write(data);
         file.flush();
+        file.close();
       } catch (Exception e) {
         System.out.println("Failed to write to file");
       }

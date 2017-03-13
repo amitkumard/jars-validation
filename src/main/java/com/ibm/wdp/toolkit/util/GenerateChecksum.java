@@ -34,8 +34,9 @@ public class GenerateChecksum {
     }
 
 
-
+    fis.close();
     return sbMd5.toString();
+   
 
   }
 
@@ -59,7 +60,7 @@ public class GenerateChecksum {
     for (int i = 0; i < mdbytesSHA.length; i++) {
       sbSHA.append(Integer.toString((mdbytesSHA[i] & 0xff) + 0x100, 16).substring(1));
     }
-
+    fis.close();
     return sbSHA.toString();
 
   }

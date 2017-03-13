@@ -42,7 +42,6 @@ public class RefreshJars {
   public static void main(String[] args) {
     FileUtil.getMetaFileNames();
     JSONParser parser = new JSONParser();
-    JSONUtils jsonUtil = new JSONUtils();
     String content = "";
     String decryptedContents = "";
     System.out.println("Refreshing local jars with latest updates...");
@@ -69,7 +68,7 @@ public class RefreshJars {
       Object obj2 = parser.parse(decryptedContents);
       //check if both metafiles are same instead looking at individual entry
       if (localMetaFound) {
-        if (jsonUtil.areEqual(obj1, obj2)) {
+        if (JSONUtils.areEqual(obj1, obj2)) {
           System.out.println("Nothing to refresh...");
           System.out.println("Data migration can begin");
         } else {
@@ -170,7 +169,7 @@ public class RefreshJars {
         local = (JSONObject) parser.parse(decryptedContents);
         filesArray = (JSONArray) local.get(RefreshJars.FILES);
       } else {
-        filesArray = new JSONArray();
+        filesArray = new JSONArray ();
       }
       filesArray.remove(localFile);
       filesArray.add(remoteFile);

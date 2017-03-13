@@ -24,3 +24,4 @@ hs_err_pid*
 
 # Ignore changes to gradle.properties as userid/password changes in there.
 gradle.properties
+/bin/
