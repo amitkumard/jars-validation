@@ -23,7 +23,11 @@ import com.ibm.wdp.toolkit.util.HttpClientHelper;
 import com.ibm.wdp.toolkit.util.EncryptionUtil;
 import com.ibm.wdp.toolkit.util.FileUtil;
 
-
+/**
+ *
+ * downloader-client main class for downloading toolkit jars
+ *
+ */
 
 public class RefreshJars {
 
@@ -90,6 +94,15 @@ public class RefreshJars {
     }
   }
 
+  /**
+   *
+   * @param local
+   *           Local metadata object that is within toolkit
+   * @param remote
+   *           Remote metadata object response received from downloder-server
+   * @throws IOException
+   *           If metadata file is not found
+   */
 
   private static void compareMetafiles(JSONObject local, JSONObject remote) throws IOException {
 
@@ -145,6 +158,15 @@ public class RefreshJars {
       LOGGER.debug("Failed deleting temporary directory");
   }
 
+  /**
+   *
+   * @param local
+   *           JSONObject of local metadata file that has to be searched against remote metafile
+   * @param remoteName
+   *            Name of the metadata attribute that needs to be searched
+   * @return
+   *         returns JSONObject if remoteName found within local metadata file
+   */
   private static JSONObject searchMetaFile(JSONObject local, String remoteName) {
     if (local == null)
       return local;
@@ -158,18 +180,50 @@ public class RefreshJars {
     return null;
   }
 
+  /**
+   *
+   * @param key
+   *          Key to compare
+   * @param localFile
+   *          Local metadata object that is within toolkit
+   * @param remoteFile
+   *           Remote metadata object response received from downloder-server
+   * @return
+   *        Returns true if values are matching, else false
+   *
+   */
   private static boolean compareValues(String key, JSONObject localFile, JSONObject remoteFile) {
     String localValue = (String) localFile.get(key);
     String remoteValue = (String) remoteFile.get(key);
     return localValue.equals(remoteValue);
   }
 
+  /**
+   *
+   * @param remoteName
+   *            JAR file name available in remote metadata object response received from downloder-server
+   * @param remoteFile
+   *            Remote metadata object response received from downloder-server
+   * @return
+   *        Returns true if checksum matches, else false
+   * @throws Exception
+   *        If error in computing checksum
+   */
   private static boolean compareChecksum(String remoteName, JSONObject remoteFile) throws Exception {
     String localChecksum = GenerateChecksum.getMd5Checksum(remoteName);
     String remoteChecksum = (String) remoteFile.get(RefreshJars.CHECKSUM);
     return localChecksum.equals(remoteChecksum);
   }
 
+  /**
+   *
+   * @param localFile
+   *             Local metadata object that is within toolkit
+   * @param remoteFile
+   *             Remote metadata object response received from downloder-server
+   * @throws IOException
+   *             If metadata file is not found or cannot be updated
+   */
   private static void updateMetaFile(JSONObject localFile, JSONObject remoteFile) throws IOException {
     FileWriter file = null;
     JSONObject local = null;
