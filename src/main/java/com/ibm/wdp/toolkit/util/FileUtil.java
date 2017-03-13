@@ -18,6 +18,7 @@ public class FileUtil {
   public static String remoteMeta;
   public static String tmpDirectory;
 
+  //TODO: Add logic for creating hiden directory for Windows platform
   public static void getMetaFileNames() {
     OsUtils.OSType detectedOS = OsUtils.getOperatingSystemType();
     switch (detectedOS.name()) {
@@ -33,6 +34,7 @@ public class FileUtil {
       case "Linux":
         localMeta = "../.metafile.json";
         remoteMeta = "../.remotemetafile.json";
+        tmpDirectory = "../.tmp";
         break;
       case "Other":
         break;
