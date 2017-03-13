@@ -21,7 +21,6 @@ public class HttpClientHelper {
   private static final Logger LOGGER = Logger.getLogger(HttpClientHelper.class);
   private static final String URL = "https://liftcfappmaster.mybluemix.net";
   private static final String DIRECTORY = "../libs";
-  private static final String TEMP_DIRECTORY = "../temp";
 
   public static void requestMetafile(String metaFileName) {
     String data = null;
@@ -110,7 +109,7 @@ public class HttpClientHelper {
 
         System.out.println(fileName + " File downloaded");
         System.out.println("Moving the file to libs");
-        MoveFileUtil.moveJAR(fileName, HttpClientHelper.DIRECTORY, HttpClientHelper.TEMP_DIRECTORY);
+        MoveFileUtil.moveJAR(fileName, HttpClientHelper.DIRECTORY, saveDir);
       } else {
         System.out.println("No file to download. Server replied HTTP code: " + responseCode);
       }

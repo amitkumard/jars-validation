@@ -91,7 +91,15 @@ public class RefreshJars {
   }
 
 
-  private static void compareMetafiles(JSONObject local, JSONObject remote) {
+  private static void compareMetafiles(JSONObject local, JSONObject remote) throws IOException {
+
+    File tmpDir = new File(FileUtil.tmpDirectory);
+    if (!tmpDir.exists())
+      tmpDir.mkdir();
+    else
+      FileUtil.deleteDirectory(tmpDir);
+    if (tmpDir.exists())
+      LOGGER.debug("Temporary Directory for moving latest JARS created");
     JSONArray files = (JSONArray) remote.get(RefreshJars.FILES);
     int index = 0;
     for (Object file : files) {
@@ -104,7 +112,7 @@ public class RefreshJars {
           System.out.println("Version same for " + remoteName);
         } else {
           System.out.println("Version mismatch for " + remoteName + " downloading latest version...");
-          HttpClientHelper.downloadJAR((String) remoteFile.get(RefreshJars.URL), RefreshJars.TEMP_DIRECTORY, remoteName);
+          HttpClientHelper.downloadJAR((String) remoteFile.get(RefreshJars.URL), FileUtil.tmpDirectory, remoteName);
           try {
             boolean compareChecksumFlag = compareChecksum(remoteName, remoteFile);
             if (compareChecksumFlag) {
@@ -117,7 +125,7 @@ public class RefreshJars {
         }
       } else {
         System.out.println("Jar details not found locally, pulling the jar " + remoteName);
-        HttpClientHelper.downloadJAR((String) remoteFile.get(RefreshJars.URL), RefreshJars.TEMP_DIRECTORY, remoteName);
+        HttpClientHelper.downloadJAR((String) remoteFile.get(RefreshJars.URL), FileUtil.tmpDirectory, remoteName);
         try {
           boolean compareChecksumFlag = compareChecksum(remoteName, remoteFile);
           if (compareChecksumFlag) {
@@ -130,6 +138,11 @@ public class RefreshJars {
       }
       index++;
     }
+    FileUtil.deleteDirectory(tmpDir);
+    if (!tmpDir.exists())
+      LOGGER.debug("Temporary directory deleted!!");
+    else
+      LOGGER.debug("Failed deleting temporary directory");
   }
 
   private static JSONObject searchMetaFile(JSONObject local, String remoteName) {
