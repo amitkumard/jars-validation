@@ -1,32 +1,31 @@
-package com.ibm.lift.util;
+/**
+ * IBM Confidential
+ * OCO Source Materials
+ * (C) Copyright IBM Corp. 2015, 2016
+ */
+package com.ibm.wdp.toolkit.util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.StringWriter;
-
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
+
 
 public class JSONUtils {
 
-  public static boolean areEqual(Object jarsmetafile, Object metafile) throws JSONException
-  {
+  public static boolean areEqual(Object jarsmetafile, Object metafile) throws JSONException {
     Object obj1Converted = convertJsonElement(jarsmetafile);
     Object obj2Converted = convertJsonElement(metafile);
     return obj1Converted.equals(obj2Converted);
   }
 
-  private static Object convertJsonElement(Object elem) throws JSONException
-  {
+  private static Object convertJsonElement(Object elem) throws JSONException {
     if (elem instanceof JSONObject) {
       JSONObject obj = (JSONObject) elem;
       Iterator<String> keys = obj.keys();
@@ -43,16 +42,15 @@ public class JSONUtils {
         jsonSet.add(convertJsonElement(arr.get(i)));
       }
       return jsonSet;
-      } else {
-        return elem;
-      }
+    } else {
+      return elem;
+    }
 
   }
 
- public static String jsonFormatter(org.json.simple.JSONObject object) throws Exception
- {
-   ObjectMapper mapper = new ObjectMapper();
-   return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
- }
+  public static String jsonFormatter(org.json.simple.JSONObject object) throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+  }
 
 }

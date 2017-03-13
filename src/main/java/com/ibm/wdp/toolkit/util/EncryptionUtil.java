@@ -1,29 +1,38 @@
-package com.ibm.lift.util;
+/**
+ * IBM Confidential
+ * OCO Source Materials
+ * (C) Copyright IBM Corp. 2015, 2016
+ */
+package com.ibm.wdp.toolkit.util;
 
 
 import javax.xml.bind.DatatypeConverter;
-import javax.crypto.*;
-import javax.crypto.spec.*;
-import javax.xml.bind.*;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+
 
 
 public class EncryptionUtil {
 
-  public static final String salt = "SaltySalt";
+  private static final String SALT = "SaltySalt";
 
-  public static final int IV_LENGTH = 16;
+  private static final int IV_LENGTH = 16;
 
 
   private static byte[] getSaltBytes() throws Exception {
-    return salt.getBytes("UTF-8");
-}
+    return SALT.getBytes("UTF-8");
+  }
 
-private static char[] getMasterPassword() {
+  private static char[] getMasterPassword() {
     return "SuperSecretPassword".toCharArray();
-}
-public static String encrpytString (String input) throws Exception {
+  }
+  public static String encrpytString(String input) throws Exception {
     SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-    PBEKeySpec spec = new PBEKeySpec(getMasterPassword(), getSaltBytes(), 65536,128);
+    PBEKeySpec spec = new PBEKeySpec(getMasterPassword(), getSaltBytes(), 65536, 128);
     SecretKey secretKey = factory.generateSecret(spec);
     SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
     Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -34,11 +43,11 @@ public static String encrpytString (String input) throws Exception {
     System.arraycopy(ivBytes, 0, finalByteArray, 0, ivBytes.length);
     System.arraycopy(encryptedTextBytes, 0, finalByteArray, ivBytes.length, encryptedTextBytes.length);
     return DatatypeConverter.printBase64Binary(finalByteArray);
-}
+  }
 
-public static String decrpytString (String input) throws Exception {
+  public static String decrpytString(String input) throws Exception {
     if (input.length() <= IV_LENGTH) {
-        throw new Exception("The input string is not long enough to contain the initialisation bytes and data.");
+      throw new Exception("The input string is not long enough to contain the initialisation bytes and data.");
     }
     byte[] byteArray = DatatypeConverter.parseBase64Binary(input);
     byte[] ivBytes = new byte[IV_LENGTH];
@@ -53,5 +62,5 @@ public static String decrpytString (String input) throws Exception {
     cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(ivBytes));
     byte[] decryptedTextBytes = cipher.doFinal(encryptedTextBytes);
     return new String(decryptedTextBytes);
-}
+  }
 }
