@@ -17,7 +17,7 @@ import java.util.Set;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
- * 
+ *
  * class for converting Object to JSONObject and comparing to JSON Objects
  *
  */
@@ -25,19 +25,19 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class JSONUtils {
 
   /**
-   * 
+   *
    * Checks if two JSONObjects are equal or not
-   * 
+   *
    * @param jarsmetafile
-   * The local metadata object
+   *          The local metadata object
    * @param metafile
-   * The remote metadata object
+   *          The remote metadata object
    * @return
-   * Returns true if the objects are equal otherwise false
+   *          Returns true if the objects are equal otherwise false
    * @throws JSONException
-   * Throws JSONException if there is an error in converting the Object to JSONObject 
+   *          Throws JSONException if there is an error in converting the Object to JSONObject
    */
-	
+
   public static boolean areEqual(Object jarsmetafile, Object metafile) throws JSONException {
     Object obj1Converted = convertJsonElement(jarsmetafile);
     Object obj2Converted = convertJsonElement(metafile);
@@ -47,7 +47,7 @@ public class JSONUtils {
   /**
    *
    * Converts an Object to a JSONObject
-   * 
+   *
    * @param elem
    * Object that is to be converted to JSONObject
    * @return
@@ -55,7 +55,7 @@ public class JSONUtils {
    * @throws JSONException
    * Throws JSONException if the input Object elem doesn't have a valid JSON structure
    */
-  
+
   private static Object convertJsonElement(Object elem) throws JSONException {
     if (elem instanceof JSONObject) {
       JSONObject obj = (JSONObject) elem;
@@ -80,9 +80,9 @@ public class JSONUtils {
   }
 
   /**
-   * 
+   *
    * Pretty prints the JSONObject as a string
-   * 
+   *
    * @param object
    * JSONObject
    * @return
@@ -90,7 +90,7 @@ public class JSONUtils {
    * @throws Exception
    * Throws Exception if there is an error in printing the JSONObject
    */
-  
+
   public static String jsonFormatter(org.json.simple.JSONObject object) throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);

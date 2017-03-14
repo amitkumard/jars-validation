@@ -11,7 +11,7 @@ public class OsUtils {
   /**
    * types of Operating Systems
    */
-	
+
   public enum OSType {
     Windows, MacOS, Linux, Other
   };
@@ -23,10 +23,10 @@ public class OsUtils {
    * detect the operating system from the os.name System property and cache
    * the result
    *
-   * @return 
+   * @return
    * Returns the operating system detected
    */
-  
+
   public static OSType getOperatingSystemType() {
     if (detectedos == null) {
       String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);

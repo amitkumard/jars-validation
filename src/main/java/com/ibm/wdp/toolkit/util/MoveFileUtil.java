@@ -13,25 +13,25 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * 
+ *
  * class for moving files (JARs) from the temp directory to the libs directory
  *
  */
 
 public class MoveFileUtil {
-  
+
   /**
-   * 
+   *
    * Moves the file from tempdir directory to the dir directory
-   * 
+   *
    * @param filename
-   * The name of the file to be moved
+   *        The name of the file to be moved
    * @param dir
-   * The name of the directory (libs) to which the file has to be moved
+   *        The name of the directory (libs) to which the file has to be moved
    * @param tempdir
-   * The name of the directory (temp) from which the file has to be moved
+   *        The name of the directory (temp) from which the file has to be moved
    */
-	
+
   public static void moveJAR(String filename, String dir, String tempdir) {
     InputStream inStream = null;
     OutputStream outStream = null;

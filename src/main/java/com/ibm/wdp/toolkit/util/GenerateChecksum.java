@@ -9,17 +9,17 @@ import java.io.FileInputStream;
 import java.security.MessageDigest;
 
 /**
- * 
+ *
  * class to generate MD5 checksum and SHA1 checksum
  *
  */
 
 public class GenerateChecksum {
-  
+
   /**
-   * 
+   *
    * Computes the MD5 checksum for a given file
-   * 
+   *
    * @param datafile
    * File for which the MD5 checksum has to be computed
    * @return
@@ -27,7 +27,7 @@ public class GenerateChecksum {
    * @throws Exception
    * Throws Exception if there is an error in generating the MD5 checksum
    */
-	
+
   public static String getMd5Checksum(String datafile) throws Exception {
 
     MessageDigest mdMd5 = MessageDigest.getInstance("MD5");
@@ -55,14 +55,14 @@ public class GenerateChecksum {
 
     fis.close();
     return sbMd5.toString();
-   
+
 
   }
 
   /**
-   * 
+   *
    * Computes the SHA1 checksum for a given file
-   * 
+   *
    * @param datafile
    * File for which the MD5 checksum has to be computed
    * @return
@@ -70,7 +70,7 @@ public class GenerateChecksum {
    * @throws Exception
    * Throws Exception if there is an error in generating the SHA1 checksum
    */
-  
+
   public static String getSHA1Checksum(String datafile) throws Exception {
 
     MessageDigest mdSHA = MessageDigest.getInstance("SHA1");

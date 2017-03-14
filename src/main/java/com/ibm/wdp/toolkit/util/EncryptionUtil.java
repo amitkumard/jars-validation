@@ -15,8 +15,8 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
 /**
- * 
- * class for performing encryption and decryption. 
+ *
+ * class for performing encryption and decryption.
  *
  */
 
@@ -28,13 +28,13 @@ public class EncryptionUtil {
 
   /**
    *
-   * Converts a string to a byte array which is used to generate key that is 
+   * Converts a string to a byte array which is used to generate key that is
    * to be used in the Public Key Encryption and Decryption
-   * 
+   *
    * @return
-   * Returns byte array 
+   *          Returns byte array
    * @throws Exception
-   * If an exception occurs while converting the string to byte array		
+   *          If an exception occurs while converting the string to byte array
    */
 
   private static byte[] getSaltBytes() throws Exception {
@@ -42,21 +42,21 @@ public class EncryptionUtil {
   }
 
   /**
-   * 
+   *
    * Converts a string to a character array
-   * 
+   *
    * @return
    * Returns an array of characters
    */
-  
+
   private static char[] getMasterPassword() {
     return "SuperSecretPassword".toCharArray();
   }
-  
+
   /**
-   * 
+   *
    * Performs encryption on a string
-   * 
+   *
    * @param input
    * The string on which the encryption is to be performed
    * @return
@@ -64,7 +64,7 @@ public class EncryptionUtil {
    * @throws Exception
    * If an exception occurs while encryption
    */
-  
+
   public static String encrpytString(String input) throws Exception {
     SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
     PBEKeySpec spec = new PBEKeySpec(getMasterPassword(), getSaltBytes(), 65536, 128);
@@ -81,9 +81,9 @@ public class EncryptionUtil {
   }
 
   /**
-   * 
+   *
    * Performs decryption of the string
-   * 
+   *
    * @param input
    * The string on which decryption is to be performed
    * @return
@@ -91,7 +91,7 @@ public class EncryptionUtil {
    * @throws Exception
    * If an exception occurs while decryption
    */
-  
+
   public static String decrpytString(String input) throws Exception {
     if (input.length() <= IV_LENGTH) {
       throw new Exception("The input string is not long enough to contain the initialisation bytes and data.");
